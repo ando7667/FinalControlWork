@@ -106,5 +106,18 @@
 
 ![alt-текст](./src/pictures/screenshot_4.png "Скрин переименования файла")
 
+### Задача 3
+Подключаем дополнительный репозиторий MySQL и установим пакет workbench-community
+из этого репозитория.
 
+    wget https://dev.mysql.com/get/mysql-apt-config_0.8.25-1_all.deb
+    sudo dpkg -i mysql-apt-config_0.8.25-1_all.deb
+    sudo apt-get update
+    sudo apt-get install mysql-workbench-community
+
+![alt-текст](./src/pictures/screenshot_3_1.png "Скрин переименования файла")
+![alt-текст](./src/pictures/screenshot_3_2.png "Скрин переименования файла")
+![alt-текст](./src/pictures/screenshot_3_3.png "Скрин переименования файла")
+![alt-текст](./src/pictures/screenshot_3_4.png "Скрин переименования файла")
+![alt-текст](./src/pictures/screenshot_3_5.png "Скрин переименования файла")
 
