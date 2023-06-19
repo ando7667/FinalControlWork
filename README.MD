@@ -104,7 +104,7 @@
     mkdir pets
     mv "Друзья человека.txt" ./pets
 
-![alt-текст](./src/pictures/screenshot_4.png "Скрин переименования файла")
+![alt-текст](./src/pictures/screenshot_4.png "Скрин перемещения файла")
 
 ### Задача 3
 Подключаем дополнительный репозиторий MySQL и установим пакет workbench-community
@@ -115,9 +115,30 @@
     sudo apt-get update
     sudo apt-get install mysql-workbench-community
 
-![alt-текст](./src/pictures/screenshot_3_1.png "Скрин переименования файла")
-![alt-текст](./src/pictures/screenshot_3_2.png "Скрин переименования файла")
-![alt-текст](./src/pictures/screenshot_3_3.png "Скрин переименования файла")
-![alt-текст](./src/pictures/screenshot_3_4.png "Скрин переименования файла")
-![alt-текст](./src/pictures/screenshot_3_5.png "Скрин переименования файла")
+![alt-текст](./src/pictures/screenshot_3_1.png "Скрин закачки пакета репозитория")
+![alt-текст](./src/pictures/screenshot_3_2.png "Скрин установки репозитория")
+![alt-текст](./src/pictures/screenshot_3_3.png "Скрин обновления исходников apt")
+![alt-текст](./src/pictures/screenshot_3_4.png "Скрин установки пакета workbench")
+![alt-текст](./src/pictures/screenshot_3_5.png "Скрин установки пакета workbench")
 
+### Задача 4
+Установим и удалим deb-пакет SublimeText с помощью dpkg. 
+
+скачаем пакет
+
+    wget https://download.sublimetext.com/sublime-text_build-4143_amd64.deb
+
+установим пакет
+
+    sudo dpkg -i sublime-text_build-4143_amd64.deb
+
+![alt-текст](./src/pictures/screenshot_4_1.png "Скрин установки пакета")
+
+Запускаем приложение. Все ОК.
+![alt-текст](./src/pictures/screenshot_4_2.png "Скрин запуска SublimeText")
+
+Удалим пакет
+
+    sudo dpkg -r sublime-text
+
+![alt-текст](./src/pictures/screenshot_4_3.png "Скрин удаления SublimeText")
