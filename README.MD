@@ -248,7 +248,7 @@
     birthday DATE,
     commands tinytext,
     id_genus int,
-    FOREIGN KEY (id_genus) REFERENCES home_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_genus) REFERENCES pack_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
     
     DROP TABLE IF EXISTS camels;
@@ -259,7 +259,7 @@
     birthday DATE,
     commands tinytext,
     id_genus int,
-    FOREIGN KEY (id_genus) REFERENCES home_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_genus) REFERENCES pack_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
     
     DROP TABLE IF EXISTS donkeys;
@@ -270,10 +270,141 @@
     birthday DATE,
     commands tinytext,
     id_genus int,
-    FOREIGN KEY (id_genus) REFERENCES home_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_genus) REFERENCES pack_animals (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 ### Задача 9
 Заполнить низкоуровневые таблицы именами(животных), командами которые они выполняют и датами рождения
 
+    -- home_animals tables data --
     
+    INSERT INTO dogs (name, birthday, commands, id_genus) VALUES
+    ('Вита', '2015-05-03', 'кличка,ко мне,фу,нельзя,сидеть,лежать,рядом,гуляй,место,фас', 1),
+    ('Оскар', '2021-06-12', 'кличка,ко мне,фу,сидеть,лежать,рядом,гуляй,место', 1),  
+    ('Грей', '2022-09-18', 'кличка,ко мне,нельзя,сидеть', 1),
+    ('Жужа', '2018-12-10', 'кличка,ко мне,нельзя,сидеть,лежать,рядом,место', 1),
+    ('Лора', '2020-10-15', 'кличка,фу,сидеть,лежать,рядом,гуляй,место,фас', 1),
+    ('Буч', '2021-11-24', 'кличка,нельзя,сидеть,лежать,рядом,место', 1);
+    
+    INSERT INTO cats (name, birthday, commands, id_genus) VALUES
+    ('Рубик', '2020-01-09', 'кличка,ко мне', 2),
+    ('Персик', '2021-06-12', 'кличка,голос', 2),  
+    ('Ася', '2017-12-04', 'кличка,голос,ко мне', 2),
+    ('Фиона', '2018-08-21', 'кличка,сидеть,ползи,принеси,голос,прыжок,ко мне', 2),
+    ('Смоки', '2019-05-11', 'кличка,сидеть,ползи,принеси,голос,прыжок,ко мне', 2),
+    ('Лиззи', '2022-07-08', 'кличка,кис-кис', 2);
+    
+    INSERT INTO hamsters (name, birthday, commands, id_genus) VALUES
+    ('Банни', '2020-01-08', 'стоять,поворот,фу,прыгай,найти', 3),
+    ('Черныш', '2021-06-22', 'стоять,фу,прыгай,найти', 3),  
+    ('Бонни', '2019-05-16', 'стоять,поворот,фу,прыгай,найти', 3),
+    ('Джей', '2018-05-30', 'стоять,поворот,фу', 3),
+    ('Винни', '2018-12-31', 'стоять,фу,найти', 3),
+    ('Хома', '2021-05-10', 'стоять,поворот,фу,прыгай', 3);
+    
+    -- pack_animals tables data --
+    
+    INSERT INTO horses (name, birthday, commands, id_genus) VALUES
+    ('Виконт', '2015-01-24', 'вперёд,стой,рысь,хоп,шагом,тише', 1),
+    ('Буран', '2019-03-28', 'вперёд,стой,тише', 1),  
+    ('Базилик', '2016-09-12', 'вперёд,стой,рысь,хоп,шагом', 1),
+    ('Гранат', '2016-07-09', 'вперёд,стой,рысь,хоп,шагом,тише', 1),
+    ('Астон', '2018-09-14', 'вперёд,стой,рысь,хоп', 1),
+    ('Апполон', '2021-11-10', 'вперёд,стой', 1);
+    
+    INSERT INTO camels (name, birthday, commands, id_genus) VALUES
+    ('Блум', '2022-01-23', 'гит,дурр,каш', 2),
+    ('Шоко', '2017-08-17', 'гит,дурр,каш,цок-цок', 2),  
+    ('Либур', '2016-02-09', 'гит,дурр,каш,хап-хап', 2),
+    ('Патрик', '2019-02-25', 'гит,дурр,каш,кхх-кхх', 2),
+    ('Фуксия', '2012-06-05', 'гит,дурр,каш,цок-цок,хап-хап,кхх-кхх', 2),
+    ('Хорд', '2022-01-10', 'гит,дурр,каш', 2);
+    
+    INSERT INTO donkeys (name, birthday, commands, id_genus) VALUES
+    ('Герл', '2022-10-16', '', 3),
+    ('Перл', '2017-08-30', '', 3),  
+    ('Тесси', '2016-04-14', '', 3),
+    ('Ава', '2019-05-14', '', 3),
+    ('Пенни', '2021-08-05', '', 3),
+    ('Луна', '2020-12-10', '', 3);
+
+### Задача 10
+Удалив из таблицы верблюдов, т.к. верблюдов решили перевезти в другой питомник на зимовку.
+Объединить таблицы лошади, и ослы в одну таблицу.
+
+    DELETE FROM camels;
+
+    CREATE OR REPLACE VIEW horses_donkey AS
+    SELECT name, birthday, commands, id_genus
+    FROM horses
+    UNION SELECT  name, birthday, commands, id_genus
+    FROM donkeys;
+    SELECT * FROM horses_donkey;
+
+### Задача 11
+Создать новую таблицу “молодые животные” в которую попадут все животные старше 1 года,
+но младше 3 лет и в отдельном столбце с точностью до месяца подсчитать возраст животных в новой таблице
+
+    DROP TABLE IF EXISTS tmp1;
+    CREATE TEMPORARY TABLE tmp1 AS
+    SELECT *, 'Собаки' AS genus FROM dogs
+    UNION SELECT *, 'Кошки' AS genus FROM cats
+    UNION SELECT *, 'Хомяки' AS genus FROM hamsters
+    UNION SELECT *, 'Лошади' as genus FROM horses
+    UNION SELECT *, 'Ослы' AS genus FROM donkeys;
+
+    DROP TABLE IF EXISTS yang_animal;
+    CREATE TABLE yang_animal AS
+    SELECT `name`, birthday, commands, id_genus, genus, TIMESTAMPDIFF(MONTH, birthday, NOW()) AS age_month
+    FROM tmp1
+    WHERE NOW() > (birthday + INTERVAL 1 YEAR) AND NOW() < (birthday + INTERVAL 3 YEAR);
+    
+    SELECT * FROM yang_animal;
+
+![alt-текст](./src/pictures/screenshot_10.png "Скрин истории команд")
+
+### Задача 12
+Объединить все таблицы в одну, при этом сохраняя поля, указывающие на прошлую принадлежность к старым таблицам.
+
+    SELECT
+	    h.name, h.birthday, h.commands, h.id_genus,
+	    pa.genus_name,
+	    IFNULL(ya.age_month,TIMESTAMPDIFF(MONTH, h.birthday, NOW())) AS age_month 
+    FROM horses h
+    LEFT JOIN yang_animal ya ON ya.name = h.name
+    LEFT JOIN pack_animals pa ON pa.id = h.id_genus
+    UNION
+    SELECT
+        dk.name, dk.birthday, dk.commands, dk.id_genus,
+        pa.genus_name,
+        IFNULL(ya.age_month,TIMESTAMPDIFF(MONTH, dk.birthday, NOW())) AS age_month
+    FROM donkeys dk
+    LEFT JOIN yang_animal ya ON ya.name = dk.name
+    LEFT JOIN pack_animals pa ON pa.id = dk.id_genus
+    UNION
+    SELECT
+        c.name, c.birthday, c.commands, c.id_genus,
+        ha.genus_name,
+        IFNULL(ya.age_month,TIMESTAMPDIFF(MONTH, c.birthday, NOW())) AS age_month
+    FROM cats c
+    LEFT JOIN yang_animal ya ON ya.name = c.name
+    LEFT JOIN home_animals ha ON ha.id = c.id_genus
+    UNION
+    SELECT
+        d.name, d.birthday, d.commands, d.id_genus,
+        ha.genus_name,
+        IFNULL(ya.age_month,TIMESTAMPDIFF(MONTH, d.birthday, NOW())) AS age_month
+    FROM dogs d
+    LEFT JOIN yang_animal ya ON ya.name = d.name
+    LEFT JOIN home_animals ha ON ha.id = d.id_genus
+    UNION
+    SELECT
+        hm.name, hm.birthday, hm.commands, hm.id_genus,
+        ha.genus_name,
+        IFNULL(ya.age_month,TIMESTAMPDIFF(MONTH, hm.birthday, NOW())) AS age_month
+    FROM hamsters hm
+    LEFT JOIN yang_animal ya ON ya.name = hm.name
+    LEFT JOIN home_animals ha ON ha.id = hm.id_genus;
+
+![alt-текст](./src/pictures/screenshot_12.png "Скрин истории команд")
+
