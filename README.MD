@@ -331,3 +331,37 @@
 ### Задача 10
 Удалив из таблицы верблюдов, т.к. верблюдов решили перевезти в другой питомник на зимовку.
 Объединить таблицы лошади, и ослы в одну таблицу.
+
+    DELETE FROM camels;
+
+    CREATE OR REPLACE VIEW horses_donkey AS
+    SELECT name, birthday, commands, id_genus
+    FROM horses
+    UNION SELECT  name, birthday, commands, id_genus
+    FROM donkeys;
+    SELECT * FROM horses_donkey;
+
+### Задача 11
+Создать новую таблицу “молодые животные” в которую попадут все животные старше 1 года,
+но младше 3 лет и в отдельном столбце с точностью до месяца подсчитать возраст животных в новой таблице
+
+    DROP TABLE IF EXISTS tmp1;
+    CREATE TEMPORARY TABLE tmp1 AS
+    SELECT *, 'Собаки' AS genus FROM dogs
+    UNION SELECT *, 'Кошки' AS genus FROM cats
+    UNION SELECT *, 'Хомяки' AS genus FROM hamsters
+    UNION SELECT *, 'Лошади' as genus FROM horses
+    UNION SELECT *, 'Ослы' AS genus FROM donkeys;
+
+    DROP TABLE IF EXISTS yang_animal;
+    CREATE TABLE yang_animal AS
+    SELECT `name`, birthday, commands, id_genus, genus, TIMESTAMPDIFF(MONTH, birthday, NOW()) AS age_month
+    FROM tmp1
+    WHERE NOW() > (birthday + INTERVAL 1 YEAR) AND NOW() < (birthday + INTERVAL 3 YEAR);
+    
+    SELECT * FROM yang_animal;
+
+![alt-текст](./src/pictures/screenshot_10.png "Скрин истории команд")
+
+### Задача 12
+
