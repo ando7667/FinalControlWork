@@ -14,9 +14,7 @@ import java.util.logging.Logger;
 
 public class DBLib {
 
-    private static Connection con;
     private static Statement statDB;
-    private static ResultSet resultSet;
     private static String query;
 
     public static java.sql.Connection getConnection() throws SQLException, IOException {
@@ -34,7 +32,7 @@ public class DBLib {
 
     public static Connection initDatabaseConnection() throws SQLException, IOException {
         System.out.println("\nПодключаемся к базе данных...");
-        con = (Connection) getConnection();
+        Connection con = (Connection) getConnection();
         checkConnection(con);
         return (Connection) getConnection();
 
@@ -52,7 +50,7 @@ public class DBLib {
     }
 
 
-    public static void writeRecords(Connection con, String table, String name, String birthday, String commands, int id_genus) throws SQLException {
+    public static void writeRecords(Connection con, String table, String name, String birthday, String commands, int id_genus) {
 
         query = "INSERT INTO " + table + " (name, birthday, commands, id_genus) VALUES (?, ?, ?, ?)";
         try (PreparedStatement prepSt = con.prepareStatement(query)) {
@@ -67,17 +65,16 @@ public class DBLib {
             System.out.println("Строка добавлена: " + rowsInserted);
         } catch (SQLException ex) {
             Logger.getLogger(DBLib.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException(ex.getMessage());
+            System.out.printf("\nПроизошла ошибка при обращении к таблице %s!  Строка не добавлена!", table);
         }
     }
 
-    public static void readTable(Connection con, String table) throws SQLException {
+    public static void readTable(Connection con, String table) {
 
         try (Statement statDB = con.createStatement()) {
             query = "SELECT id, name, birthday, commands, id_genus" +
-                    " FROM " + table +
-                    " ";
-            resultSet = statDB.executeQuery(query);
+                    " FROM " + table;
+            ResultSet resultSet = statDB.executeQuery(query);
             boolean empty = true;
             while (resultSet.next()) {
                 empty = false;
@@ -92,8 +89,10 @@ public class DBLib {
                 System.out.printf("\t В таблице %s нет записей", table);
             }
 
+        } catch (SQLException ex) {
+            Logger.getLogger(DBLib.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.printf("\nПроизошла ошибка при обращении к таблице %s", table);
         }
-
     }
 
 

@@ -2,11 +2,10 @@
 import java.io.IOException;
 import java.sql.SQLException;
 
-import Models.Animals.HomeAnimalsMem.Cat;
-import Models.Animals.HomeAnimalsMem.Dog;
-import Models.Animals.PackAnimalsMem.Horse;
+import UI.Menu;
+import UI.MenuAction;
 import org.mariadb.jdbc.Connection;
-import Models.Animals.HomeAnimals;
+
 import static Services.DBLib.*;
 
 public class Application {
@@ -17,17 +16,35 @@ public class Application {
     public static void main(String[] args) throws SQLException, IOException {
         try {
             connection = initDatabaseConnection();
-            System.out.println("Читаем содержимое таблицы cats из базы данных human_friends");
-            readTable(connection, "cats");
-            // Введем новых животных
-            Dog pet1 = new Dog(110,"Фунтик","2015-08-16","стоять,лежать,голос");
-            Cat pet2 = new Cat(100,"Люси","2015-11-21","имя,кискис");
-            Horse pet3 = new Horse(80,"Арчебальд","2015-11-21","вперед,стой,рысь");
-            System.out.println("Вывод новых животных в консоль");
-            System.out.println(pet1.toString());
-            System.out.println(pet2.toString());
-            System.out.println(pet3.toString());
+            Menu m = new Menu();
+            MenuAction ma = new MenuAction();
+            // вызов меню
+            boolean menuContinue = true;
+            while (menuContinue) {
+                m.showMenu();
+                // если выбрали режим 0 - выход из программы
+                if (m.getAction() != 0) {
+                    ma.selectAction(m.getAction(), m.getAnimalType(), connection);
+                }else {
+                    menuContinue = false;
+                }
+            }
+            // все далее для теста, удалить  !!!
+//            System.out.println("Читаем содержимое таблицы cats из базы данных human_friends");
+//            readTable(connection, "cats");
+//            // Введем новых животных
+//            Dog pet1 = new Dog(110,"Фунтик","2015-08-16","стоять,лежать,голос");
+//            Cat pet2 = new Cat(100,"Люси","2015-11-21","имя,кискис");
+//            Horse pet3 = new Horse(80,"Арчебальд","2015-11-21","вперед,стой,рысь");
+//            System.out.println("Вывод новых животных в консоль");
+//            System.out.println(pet1.toString());
+//            System.out.println(pet2.toString());
+//            System.out.println(pet3.toString());
+
+            //запись питомца в соответствующую таблицу
 //            writeRecords(connection,"cats","Люси","2015-11-21", "имя,кискис", 2);
+
+            // для теста --- потом удалить
 //            String group = pet1.getStringAnimalGroups();
 //            System.out.println("group= "+group);
 //            System.out.println("тип группы: "+pet1.getAnimalGroups());
