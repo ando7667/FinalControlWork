@@ -1,6 +1,6 @@
 package Models.Animals;
 
-import Models.AnimalsType.animalType;
+import Models.AnimalsType.AnimalSpecies;
 import java.util.List;
 import static Models.AnimalsType.getAnimalsType;
 
@@ -18,7 +18,7 @@ abstract public class Animals {
     public String birthday;
     public List<String> commands;
 
-    public animalType type;
+    public AnimalSpecies type;
 
     public int getIdPet() {
         return this.idPet;
@@ -65,7 +65,7 @@ abstract public class Animals {
 
     }
 
-    public void setType(animalType type) {
+    public void setType(AnimalSpecies type) {
         this.type = type;
     }
 

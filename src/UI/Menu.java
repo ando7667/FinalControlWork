@@ -2,16 +2,16 @@ package UI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 import static Models.AnimalsType.getStringEnumAnimalType;
+import static UI.UserInterface.OutputSplitLine;
 
 public class Menu {
     private static final Scanner scanner = new Scanner(System.in);
 
-    // массив строк меню выбора опреции c питомцами
-    private final String[] arr_action = new String[] {
+    // массив строк меню выбора действия c питомцами
+    private final String[] arr_action = new String[]{
             "Выход",
             "Вывод списка питомцев по видам",
             "Добавить нового питомца",
@@ -24,13 +24,13 @@ public class Menu {
     String[] arr_genus;
 
     // сообщения для меню
-    String msgAction = "\nВыбирите действие: ";
-    String msgAnimalType = "\nВыберите вид животного:";
+    String msgAction = "Выберите действие: ";
+    String msgAnimalType = "Выберите вид животного:";
 
     // хранит выбранное действие в меню
     private int action;
 
-    // хранит выбранный тип животного в меню
+    // хранит выбранный вид животного в меню
     private int animalType;
 
     // конструктор
@@ -38,81 +38,68 @@ public class Menu {
         this.action = 0;
         this.animalType = 0;
 
-        // переносим содержимое enum AnimalType.animalType в массив arr_genus, который используется
-        //  для построения подменю выбора типа животного
+        // переносим содержимое enum AnimalType.AnimalSpecies в массив arr_genus, который используется
+        //  для построения подменю выбора вида питомца
         String str = getStringEnumAnimalType();
-        ArrayList<String>listAnimals = new ArrayList<String>(Arrays.asList(str.split(",")));
-        listAnimals.add(0,"Назад");
+        ArrayList<String> listAnimals = new ArrayList<String>(Arrays.asList(str.split(",")));
+        listAnimals.add(0, "Назад");
 
-        this.arr_genus =  new String[ listAnimals.size() ];
-        listAnimals.toArray (this.arr_genus);
-
+        this.arr_genus = new String[listAnimals.size()];
+        listAnimals.toArray(this.arr_genus);
     }
 
     public int getAction() {
         return this.action;
     }
 
-    public int getAnimalType() { return this.animalType;
+    public int getAnimalType() {
+        return this.animalType;
     }
 
-    // вывод массива строк на экран в виде меню
-    private void showText(String[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.println(i + " - " + arr[i]);
-        }
-    }
-
-    // получить число от пользователя
-    public double getNumber() {
-        double num;
-        if (scanner.hasNextInt()) {
-            num = scanner.nextInt();
+    /**
+     * Основной метод работы с меню
+     * реализует выбор пользователем действия из меню и вид питомца
+     */
+    public void showMenu() {
+        UserInterface.showText(arr_action);
+        setAction();
+        OutputSplitLine();
+        if (action == 0) {
+            System.out.println("Пока!");
         } else {
-            System.out.println("Вы допустили ошибку при вводе операции. Попробуйте еще раз.");
-            scanner.next();
-            //рекурсия до правильного ввода
-            num = getNumber();
+            if (action < arr_action.length - 1) {
+                UserInterface.showText(arr_genus);
+                setAnimalType();
+                OutputSplitLine();
+                if (animalType == 0) {
+                    showMenu();
+                }
+            }
         }
-        return num;
     }
 
-    // установка действия
+    /**
+     * Метод для выбора пользователем пункта меню действий
+     */
     private void setAction() {
         while (true) {
-            System.out.println(msgAction);
-            showText(arr_action);
-            action = (int) getNumber();
-            // проверяем выход за пределы существующих действий
+            action = UserInterface.InputInt(msgAction);
+            // проверяем выход за пределы существующих действий ( смотри arr_action )
             if (action < arr_action.length && action >= 0) {
                 break;
             }
         }
     }
 
+    /**
+     * Метод для выбора пользователем вида питомца в доп.меню
+     */
     private void setAnimalType() {
         while (true) {
-            System.out.println(msgAnimalType);
-            showText(arr_genus);
-            animalType = (int) getNumber();
-            // проверяем выход за пределы существующих типов ( смотри enum AnimalType.animalType )
+            animalType = UserInterface.InputInt(msgAnimalType);
+            // проверяем выход за пределы существующих типов ( смотри enum AnimalType.AnimalSpecies )
             if (animalType < arr_genus.length && animalType >= 0) {
                 break;
-            }
-        }
-    }
-
-    // пройтись по меню и выбрать операцию и тип животного
-    public void showMenu() {
-        setAction();
-        if (action == 0) {
-            System.out.println("Пока!");
-        }else {
-            if (action < arr_action.length - 1) {
-                setAnimalType();
-                if (animalType == 0) {
-                    showMenu();
-                }
             }
         }
     }

@@ -1,13 +1,10 @@
 package Services;
 
-import Models.Animals.Animals;
 import org.mariadb.jdbc.Connection;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +35,6 @@ public class DBLib {
 
     }
 
-
     public static void closeDatabaseConnection(Connection con) throws SQLException {
         System.out.println("\nЗакрываем подключение к базе данных...");
         con.close();
@@ -50,6 +46,24 @@ public class DBLib {
     }
 
 
+    public static int getNumberAnimalsRecords(Connection con, String table) throws SQLException {
+
+        int records=0;
+        try (Statement statDB = con.createStatement()) {
+            query = "SELECT COUNT(*) AS records" +
+                    " FROM " + table;
+            ResultSet resultSet = statDB.executeQuery(query);
+            boolean empty = true;
+            while (resultSet.next()) {
+                empty = false;
+                records = resultSet.getInt(1);
+           }
+            if (empty) {
+                System.out.printf("\t В таблице %s нет записей", table);
+            }
+        }
+        return records;
+    }
     public static void writeRecords(Connection con, String table, String name, String birthday, String commands, int id_genus) {
 
         query = "INSERT INTO " + table + " (name, birthday, commands, id_genus) VALUES (?, ?, ?, ?)";
@@ -62,10 +76,12 @@ public class DBLib {
             prepSt.setInt(4, id_genus);
 
             int rowsInserted = prepSt.executeUpdate();
+            AnimalCounter.add();
             System.out.println("Строка добавлена: " + rowsInserted);
+
         } catch (SQLException ex) {
             Logger.getLogger(DBLib.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.printf("\nПроизошла ошибка при обращении к таблице %s!  Строка не добавлена!", table);
+            System.out.printf("\nПроизошла ошибка при обращении к таблице %s!  Строка не добавлена!\n", table);
         }
     }
 
@@ -95,5 +111,76 @@ public class DBLib {
         }
     }
 
+    public static String readCommandsAnimal(Connection con, String table, int ida) {
+
+        String commands = "";
+        try (Statement statDB = con.createStatement()) {
+            query = "SELECT id, name, commands" +
+                    " FROM " + table +
+                    " WHERE id=" + ida;
+            ResultSet resultSet = statDB.executeQuery(query);
+            boolean empty = true;
+            while (resultSet.next()) {
+                empty = false;
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                commands = resultSet.getString(3);
+            }
+            if (empty) {
+                System.out.printf("\t В таблице %s нет записи с таким ИД", table);
+                return null;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DBLib.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.printf("\nПроизошла ошибка при обращении к таблице %s", table);
+        }
+        return commands;
+    }
+
+    public static ArrayList<String> readRecordTable(Connection con, String table, int ida) {
+
+        ArrayList<String> animal = new ArrayList<>();
+
+        try (Statement statDB = con.createStatement()) {
+            query = "SELECT id, name, birthday, commands, id_genus" +
+                    " FROM " + table +
+                    " WHERE id=" + ida;
+            ResultSet resultSet = statDB.executeQuery(query);
+            boolean empty = true;
+            while (resultSet.next()) {
+                empty = false;
+                animal.add(resultSet.getString(1));
+                animal.add(resultSet.getString(2));
+                animal.add(resultSet.getString(3));
+                animal.add(resultSet.getString(4));
+                animal.add(resultSet.getString(5));
+            }
+            if (empty) {
+                System.out.printf("\t В таблице %s нет записей", table);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DBLib.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.printf("\nПроизошла ошибка при обращении к таблице %s", table);
+        }
+        return animal;
+    }
+
+    public static void updateRecordTable(Connection con, String table, ArrayList<String> animal) {
+
+        try (Statement statDB = con.createStatement()) {
+            query = "UPDATE " + table +
+                    " SET name='" + animal.get(1) +
+                    "' , birthday='" + animal.get(2) +
+                    "' , commands='" + animal.get(3) +
+                    "' WHERE id=" + animal.get(0);
+            int rowsUpdated = statDB.executeUpdate(query);
+            System.out.println("\nСтрока обновлена: " + rowsUpdated);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBLib.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.printf("\nПроизошла ошибка при обращении к таблице %s", table);
+        }
+    }
 
 }

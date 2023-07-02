@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class Horse extends PackAnimals {
 
     public Horse() {
-        this.type = AnimalsType.animalType.horses;
+        this.type = AnimalsType.AnimalSpecies.horses;
     }
 
     public Horse(int id, String name, String date,String commands){
@@ -17,7 +17,7 @@ public class Horse extends PackAnimals {
         this.name = name;
         this.birthday = date;
         this.commands = new ArrayList<String>(Arrays.asList(commands.split(",")));;
-        this.type = AnimalsType.animalType.horses;
+        this.type = AnimalsType.AnimalSpecies.horses;
     }
 
 }

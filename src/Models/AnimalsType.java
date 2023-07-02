@@ -5,32 +5,47 @@ import java.util.stream.Stream;
 public class AnimalsType {
 
     // виды животных
-    public enum animalType {
-        dogs,
-        cats,
-        hamsters,
-        horses,
-        camels,
-        donkeys
+    public enum AnimalSpecies {
+        dogs(1),
+        cats(2),
+        hamsters(3),
+        horses(1),
+        camels(2),
+        donkeys(3);
+        private int genus;
+
+        AnimalSpecies(int genus) {
+            this.genus = genus;
+        }
+
+        public static Stream<AnimalSpecies> stream() {
+            return Stream.of(AnimalSpecies.values());
+        }
+
     }
 
-    public static Stream<animalType> stream() {
-        return Stream.of(animalType.values());
-    }
 
+    /**
+     * Метод возвращает в строке все виды животных через запятую из перечисления AnimalSpecies
+     */
     public static String getStringEnumAnimalType() {
         String str = "";
-        for (animalType at : animalType.values()) {
+        for (AnimalSpecies at : AnimalSpecies.values()) {
             str = str.concat(getAnimalsType(at) + ",");
         }
-        if (str != null && str.length() > 0) {
+        if (str.length() > 0) {
             str = str.substring(0, str.length() - 1);
         }
         return str;
     }
 
-    public static String getAnimalsType(animalType typeAnimals) {
-        return switch (typeAnimals) {
+    /**
+     * Метод возвращает строковое представление выбранного значения из перечисления AnimalSpecies
+     *
+     * @param animalSpecies интересующее значение из перечисления AnimalSpecies
+     */
+    public static String getAnimalsType(AnimalSpecies animalSpecies) {
+        return switch (animalSpecies) {
             case dogs -> "Собака";
             case cats -> "Кошка";
             case hamsters -> "Хомяк";
@@ -40,12 +55,27 @@ public class AnimalsType {
         };
     }
 
-    public static String getByValueAnimalsType(int value) {
-        for (animalType at : animalType.values()) {
+    /**
+     * Метод возвращает вид питомца из перечисления AnimalSpecies, соответсующий целому чилу
+     *
+     * @param value целое число, которому ищется соответствие в перечислении AnimalSpecies
+     */
+    public static AnimalSpecies getAnimalType(int value) {
+        for (AnimalSpecies at : AnimalSpecies.values()) {
             if (at.ordinal() == value)
-                return at.toString();
+                return at;
         }
         throw new IllegalArgumentException("нету такого элемента в перечислении" + value);
+    }
+
+    /**
+     * Метод возвращает число соответствия вида питомца с таблицами home_animals и pack_animals базы данных
+     * из перечисления AnimalSpecies, соответсующий целому чилу ( хранится в поле genus перечисления AnimalSpecies)
+     *
+     * @param value целое число, которому ищется соответствие в перечислении AnimalSpecies
+     */
+    public static int getGenusAnimalSpecies(int value) {
+        return getAnimalType(value).genus;
     }
 
 }
