@@ -419,7 +419,8 @@
 Добавил методы вывода нужной таблицы питомцев и записи нового питомца в таблицу.
 Добавил методы работы с командами для животного.
 Реализовал меню.
+[Класс Счетчик](https://github.com/ando7667/FinalControlWork/blob/main/src)
 Добавил класс сетчик ( Counter ) и методы для работы с ним.
-
+[Класс Счетчик](https://github.com/ando7667/FinalControlWork/blob/main/src/Services/AnimalCounter.java)
 
 
